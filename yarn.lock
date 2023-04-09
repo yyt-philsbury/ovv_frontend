@@ -1148,6 +1148,13 @@ eslint-plugin-jsx-a11y@^6.5.1:
     object.fromentries "^2.0.6"
     semver "^6.3.0"
 
+eslint-plugin-mui-path-imports@0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-mui-path-imports/-/eslint-plugin-mui-path-imports-0.0.15.tgz#c3ac85a1d7800eab36d4fe67ae1feb0b5d26780b"
+  integrity sha512-u61kgRBtUAG+zoApuf8oWuW6mf3SIfrpMq/gSQEM2h/3qzkqvWXB4RRmPzVryS6bpeXT0QsW8rFcdcMVnoz0hw==
+  dependencies:
+    requireindex "^1.2.0"
+
 eslint-plugin-no-relative-import-paths@1.5.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/eslint-plugin-no-relative-import-paths/-/eslint-plugin-no-relative-import-paths-1.5.2.tgz#c35f2fd0bf2a6a57b268193ed7df63ff7000134e"
@@ -2391,6 +2398,11 @@ regjsparser@^0.9.1:
   integrity sha512-dQUtn90WanSNl+7mQKcXAgZxvUe7Z0SqXlgzv0za4LwiUhyzBC58yQO3liFoUgu8GiJVInAhJjkj1N0EtQ5nkQ==
   dependencies:
     jsesc "~0.5.0"
+
+requireindex@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/requireindex/-/requireindex-1.2.0.tgz#3463cdb22ee151902635aa6c9535d4de9c2ef1ef"
+  integrity sha512-L9jEkOi3ASd9PYit2cwRfyppc9NoABujTP8/5gFcbERmo5jUoAKovIC3fsF17pkTnGsrByysqX+Kxd2OTNI1ww==
 
 resolve-from@^4.0.0:
   version "4.0.0"
