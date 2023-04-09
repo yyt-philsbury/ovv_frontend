@@ -26,6 +26,25 @@ module.exports = {
       { allowSameFolder: false },
     ],
     'mui-path-imports/mui-path-imports': 'error',
+
+    // https://mui.com/material-ui/guides/minimizing-bundle-size/
+    // "Be aware that we only support first and second-level imports.
+    // Anything deeper is considered private and can cause issues,
+    // such as module duplication in your bundle."
+    //
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['@mui/*/*/*'],
+            message:
+              'For @mui, cannot import more than second level. Refer to .eslintrc.js for more details',
+          },
+        ],
+      },
+    ],
+
     'no-console': 'error',
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
