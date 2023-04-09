@@ -1,0 +1,40 @@
+{
+  "name": "nextjs_frontend_template",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "format": "prettier --write \"pages/**/*.{ts,tsx}\"",
+    "lint": "next lint",
+    "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "sort": "sort-package-json",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@emotion/react": "11.10.6",
+    "@emotion/styled": "11.10.6",
+    "@fontsource/roboto": "4.5.8",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "5.11.16",
+    "next": "13.3.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "18.15.11",
+    "@types/react": "18.0.33",
+    "@typescript-eslint/eslint-plugin": "5.57.1",
+    "eslint": "8.38.0",
+    "eslint-config-next": "13.3.0",
+    "eslint-config-prettier": "8.8.0",
+    "eslint-plugin-no-relative-import-paths": "1.5.2",
+    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-simple-import-sort": "10.0.0",
+    "eslint-plugin-unicorn": "46.0.0",
+    "eslint-plugin-unused-imports": "2.0.0",
+    "prettier": "2.8.7",
+    "sort-package-json": "2.4.1",
+    "typescript": "5.0.4"
+  }
+}
+
