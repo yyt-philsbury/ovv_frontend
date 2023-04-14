@@ -19,8 +19,7 @@ const Search = styled('div')(({ theme }) => ({
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
+  [theme.breakpoints.up('xs')]: {
     marginLeft: theme.spacing(1),
     width: 'auto',
   },
@@ -42,37 +41,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
     [theme.breakpoints.up('xs')]: {
       width: '20ch',
-      '&:focus': {
-        width: '25ch',
-      },
     },
     [theme.breakpoints.up('sm')]: {
       width: '25ch',
-      '&:focus': {
-        width: '30ch',
-      },
     },
     [theme.breakpoints.up('md')]: {
       width: '30ch',
-      '&:focus': {
-        width: '45ch',
-      },
     },
     [theme.breakpoints.up('lg')]: {
       width: '45ch',
-      '&:focus': {
-        width: '60ch',
-      },
     },
     [theme.breakpoints.up('xl')]: {
       width: '60ch',
-      '&:focus': {
-        width: '80ch',
-      },
     },
   },
 }));
@@ -101,6 +83,7 @@ function Navbar() {
               variant="h5"
               sx={{
                 display: {
+                  xs: 'none',
                   sm: 'none',
                   md: 'block',
                 },
@@ -124,6 +107,7 @@ function Navbar() {
               variant="h6"
               sx={{
                 display: {
+                  xs: 'none',
                   sm: 'none',
                   md: 'block',
                 },
@@ -141,4 +125,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
