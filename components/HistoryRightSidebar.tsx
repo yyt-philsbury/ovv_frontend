@@ -30,9 +30,14 @@ function HistoryRightSideBar(props: {
   open: boolean;
   handleDrawerClose: () => void;
   list: VideoInfoType[];
+  onVideoSelected: (vid: VideoInfoType) => void;
 }) {
-  const { open, handleDrawerClose, list } = props;
+  const { open, handleDrawerClose, list, onVideoSelected } = props;
   const theme = useTheme();
+
+  const handleVideoSelected = (vid: VideoInfoType) => {
+    onVideoSelected(vid);
+  };
 
   return (
     <Drawer
@@ -72,14 +77,18 @@ function HistoryRightSideBar(props: {
       <List>
         {list.map((vidInfo, index) => (
           <ListItem key={index} disablePadding>
-            <ListItemAvatar>
-              <Avatar
-                variant="square"
-                sx={{ height: '80px', width: '80px' }}
-                src={`https://i.ytimg.com/vi/${vidInfo.id}/default.jpg`}
-              />
-            </ListItemAvatar>
-            <ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                handleVideoSelected(vidInfo);
+              }}
+            >
+              <ListItemAvatar>
+                <Avatar
+                  variant="square"
+                  sx={{ height: '80px', width: '80px' }}
+                  src={`https://i.ytimg.com/vi/${vidInfo.id}/default.jpg`}
+                />
+              </ListItemAvatar>
               <ListItemText
                 primary={vidInfo.title}
                 secondary={`${vidInfo.original_upload_date} ${vidInfo.author}`}
