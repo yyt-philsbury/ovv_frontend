@@ -7,8 +7,11 @@ import Typography from '@mui/material/Typography';
 import React from 'react';
 import { VideoInfoType } from 'types/VideoInfoType';
 
-function VideoCard(props: { videoInfo: VideoInfoType }) {
-  const { videoInfo } = props;
+function VideoCard(props: {
+  videoInfo: VideoInfoType;
+  onVideoSelected: (id: string) => void;
+}) {
+  const { videoInfo, onVideoSelected } = props;
   const { author, id, original_upload_date, title } = videoInfo;
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -31,7 +34,14 @@ function VideoCard(props: { videoInfo: VideoInfoType }) {
       </CardContent>
       <CardActions>
         <Button size="small">Go to Youtube</Button>
-        <Button size="small">Watch Video</Button>
+        <Button
+          size="small"
+          onClick={() => {
+            onVideoSelected(id);
+          }}
+        >
+          Watch Video
+        </Button>
       </CardActions>
     </Card>
   );
