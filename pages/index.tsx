@@ -131,6 +131,10 @@ const Home: NextPage = () => {
     setChosenVideoId(vid.id);
     setOpenYTDialog(true);
   };
+  const handleClearHist = () => {
+    setVidHist([]);
+    localStorage.setItem('videoHistory', JSON.stringify([]));
+  };
 
   return (
     <>
@@ -143,6 +147,7 @@ const Home: NextPage = () => {
         handleDrawerClose={handleHistoryBarClose}
         list={vidHist}
         onVideoSelected={handleVideoSelected}
+        handleClearHist={handleClearHist}
       />
       <YouTubeDialog
         videoId={chosenVideoId}

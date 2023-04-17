@@ -12,6 +12,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
 import { VideoInfoType } from 'types/VideoInfoType';
 
@@ -75,6 +76,7 @@ function HistoryRightSideBar(props: {
       open={open}
     >
       <DrawerHeader onClick={handleCloseDrawer}>
+        <Typography>Close</Typography>
         <IconButton onClick={handleCloseDrawer}>
           {theme.direction === 'ltr' ? (
             <ChevronRightIcon />
