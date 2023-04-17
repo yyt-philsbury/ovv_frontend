@@ -57,7 +57,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function Navbar() {
+function Navbar(props: { handleHistoryBarOpen: () => void }) {
+  const { handleHistoryBarOpen } = props;
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
@@ -67,7 +69,18 @@ function Navbar() {
             justifyContent: 'space-between',
           }}
         >
-          <Stack direction="row" alignItems="center" spacing={1}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
+            sx={{
+              display: {
+                xs: 'none',
+                sm: 'none',
+                md: 'block',
+              },
+            }}
+          >
             <Link href="/" style={{ textDecoration: 'none' }}>
               <Button sx={{ color: '#fff', fontSize: 20 }}>LATEST</Button>
             </Link>
@@ -84,6 +97,20 @@ function Navbar() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
+          <Button
+            sx={{
+              color: '#fff',
+              fontSize: 20,
+              display: {
+                xs: 'none',
+                sm: 'none',
+                md: 'block',
+              },
+            }}
+            onClick={handleHistoryBarOpen}
+          >
+            HISTORY
+          </Button>
         </Toolbar>
       </AppBar>
       {/* Empty toolbar to move content down because we want fixed position */}

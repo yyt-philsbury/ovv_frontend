@@ -1,4 +1,5 @@
 import Stack from '@mui/material/Stack';
+import HistoryRightSideBar from 'components/HistoryRightSidebar';
 import Navbar from 'components/Navbar';
 import YouTubeDialog from 'components/PlayVideoDialog';
 import VideoList from 'components/VideoList';
@@ -7,12 +8,14 @@ import React from 'react';
 import { VideoInfoType } from 'types/VideoInfoType';
 
 const Home: NextPage = () => {
-  const [data, setData] = React.useState<VideoInfoType[]>([]);
-  const [urlChosen, setUrlChosen] = React.useState<string>('');
-  const [open, setOpen] = React.useState(false);
+  const [videos, setVideos] = React.useState<VideoInfoType[]>([]);
+  const [chosenVideoId, setChosenVideoId] = React.useState<string>('');
+  const [openYTDialog, setOpenYTDialog] = React.useState(false);
+  const [historyBarOpen, setHistoryBarOpen] = React.useState(false);
+  const [vidHist, setVidHist] = React.useState<VideoInfoType[]>([]);
 
   React.useEffect(() => {
-    setData([
+    setVideos([
       {
         author: 'bob',
         id: 'mFCC8PGCZC4',
@@ -104,23 +107,48 @@ const Home: NextPage = () => {
     ]);
   }, []);
 
+  React.useEffect(() => {
+    const hist = localStorage.getItem('videoHistory');
+    setVidHist(hist ? JSON.parse(hist) : []);
+  }, []);
+
+  const handleHistoryBarClose = () => {
+    setHistoryBarOpen(false);
+  };
+  const handleHistoryBarOpen = () => {
+    setHistoryBarOpen(true);
+  };
+  const handleUpdateVidHistory = (vid: VideoInfoType) => {
+    const newHist = [vid, ...vidHist.filter(e => e.id !== vid.id)].slice(
+      0,
+      100,
+    );
+    setVidHist(newHist);
+    localStorage.setItem('videoHistory', JSON.stringify(newHist));
+  };
+  const handleVideoSelected = (vid: VideoInfoType) => {
+    handleUpdateVidHistory(vid);
+    setChosenVideoId(vid.id);
+    setOpenYTDialog(true);
+  };
+
   return (
-    <Stack spacing={1}>
-      <Navbar />
+    <>
+      <Stack spacing={1}>
+        <Navbar handleHistoryBarOpen={handleHistoryBarOpen} />
+        <VideoList videos={videos} onVideoSelected={handleVideoSelected} />
+      </Stack>
+      <HistoryRightSideBar
+        open={historyBarOpen}
+        handleDrawerClose={handleHistoryBarClose}
+        list={vidHist}
+      />
       <YouTubeDialog
-        videoId={urlChosen}
-        open={open}
-        onClose={() => setOpen(false)}
+        videoId={chosenVideoId}
+        open={openYTDialog}
+        onClose={() => setOpenYTDialog(false)}
       />
-      <VideoList
-        videos={data}
-        onVideoSelected={(url: string) => {
-          setUrlChosen(url);
-          console.log(url);
-          setOpen(true);
-        }}
-      />
-    </Stack>
+    </>
   );
 };
 

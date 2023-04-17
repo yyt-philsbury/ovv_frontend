@@ -9,7 +9,7 @@ import { VideoInfoType } from 'types/VideoInfoType';
 
 function VideoCard(props: {
   videoInfo: VideoInfoType;
-  onVideoSelected: (id: string) => void;
+  onVideoSelected?: (vidSelected: VideoInfoType) => void;
 }) {
   const { videoInfo, onVideoSelected } = props;
   const { author, id, original_upload_date, title } = videoInfo;
@@ -37,7 +37,7 @@ function VideoCard(props: {
         <Button
           size="small"
           onClick={() => {
-            onVideoSelected(id);
+            if (onVideoSelected) onVideoSelected(videoInfo);
           }}
         >
           Watch Video

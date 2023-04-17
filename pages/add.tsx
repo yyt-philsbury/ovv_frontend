@@ -4,11 +4,14 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import axios, { AxiosError } from 'axios';
+import HistoryRightSideBar from 'components/HistoryRightSidebar';
 import Navbar from 'components/Navbar';
+import YouTubeDialog from 'components/PlayVideoDialog';
 import VideoCard from 'components/VideoCard';
 import type { NextPage } from 'next';
 import React from 'react';
 import { AddNewVideoResultType } from 'types/AddNewVideoResultType';
+import { VideoInfoType } from 'types/VideoInfoType';
 import Url from 'url-parse';
 import timeoutSignalController from 'utils/abort_timeout';
 
@@ -42,6 +45,15 @@ const Home: NextPage = () => {
   const [addVideoResult, setAddVideoResult] =
     React.useState<AddNewVideoResultType | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [historyBarOpen, setHistoryBarOpen] = React.useState(false);
+  const [vidHist, setVidHist] = React.useState<VideoInfoType[]>([]);
+  const [chosenVideoId, setChosenVideoId] = React.useState<string>('');
+  const [openYTDialog, setOpenYTDialog] = React.useState(false);
+
+  React.useEffect(() => {
+    const hist = localStorage.getItem('videoHistory');
+    setVidHist(hist ? JSON.parse(hist) : []);
+  }, []);
 
   const handleSubmission = async () => {
     let abortSignalController;
@@ -77,64 +89,98 @@ const Home: NextPage = () => {
     }
   };
 
+  const handleHistoryBarClose = () => {
+    setHistoryBarOpen(false);
+  };
+  const handleHistoryBarOpen = () => {
+    setHistoryBarOpen(true);
+  };
+  const handleUpdateVidHistory = (vid: VideoInfoType) => {
+    const newHist = [vid, ...vidHist];
+    setVidHist(newHist);
+    localStorage.setItem('videoHistory', JSON.stringify(newHist));
+  };
+  const handleVideoSelected = (vid: VideoInfoType) => {
+    handleUpdateVidHistory(vid);
+    setChosenVideoId(vid.id);
+    setOpenYTDialog(true);
+  };
+
   return (
-    <Stack spacing={1}>
-      <Navbar />
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '10px',
-        }}
-      >
-        <Typography variant="h2">Submission Rules:</Typography>
-        <Typography variant="h4">{'1) Must be a youtube link'}</Typography>
-        <Typography variant="h6">
-          {
-            'Example: https://www.youtube.com/watch?v=XXXX or https://youtu.be/XXXX'
-          }
-        </Typography>
-        <Typography variant="h4">
-          {'2) Must have over 1 million views'}
-        </Typography>
-        <Typography variant="h4">
-          {'3) Must be uploaded on or before 2011-01-01'}
-        </Typography>
-        <TextField
-          value={url}
+    <>
+      <Stack spacing={1}>
+        <Navbar handleHistoryBarOpen={handleHistoryBarOpen} />
+        <Box
           sx={{
-            width: '50%',
-          }}
-          placeholder="https://www.youtube.com/watch?v=XXXX"
-          onChange={evt => {
-            setUrl(evt.target.value || '');
-          }}
-        />
-        <Button
-          disabled={isLoading}
-          variant="contained"
-          onClick={() => {
-            setIsLoading(true);
-            setErrTxt('');
-            handleSubmission();
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '10px',
           }}
         >
-          SUBMIT
-        </Button>
-        {errTxt && (
-          <Typography color="red" variant="h5">
-            {errTxt}
+          <Typography variant="h2">Submission Rules:</Typography>
+          <Typography variant="h4">{'1) Must be a youtube link'}</Typography>
+          <Typography variant="h6">
+            {
+              'Example: https://www.youtube.com/watch?v=XXXX or https://youtu.be/XXXX'
+            }
           </Typography>
-        )}
-        {addVideoResult && !addVideoResult.isNewVideo && (
-          <Typography color="red" variant="h5">
-            Video was already uploaded
+          <Typography variant="h4">
+            {'2) Must have over 1 million views'}
           </Typography>
-        )}
-        {addVideoResult && <VideoCard videoInfo={addVideoResult.video} />}
-      </Box>
-    </Stack>
+          <Typography variant="h4">
+            {'3) Must be uploaded on or before 2011-01-01'}
+          </Typography>
+          <TextField
+            value={url}
+            sx={{
+              width: '50%',
+            }}
+            placeholder="https://www.youtube.com/watch?v=XXXX"
+            onChange={evt => {
+              setUrl(evt.target.value || '');
+            }}
+          />
+          <Button
+            disabled={isLoading}
+            variant="contained"
+            onClick={() => {
+              setIsLoading(true);
+              setErrTxt('');
+              handleSubmission();
+            }}
+          >
+            SUBMIT
+          </Button>
+          {errTxt && (
+            <Typography color="red" variant="h5">
+              {errTxt}
+            </Typography>
+          )}
+          {addVideoResult && !addVideoResult.isNewVideo && (
+            <Typography color="red" variant="h5">
+              Video was already uploaded
+            </Typography>
+          )}
+          {addVideoResult && (
+            <VideoCard
+              videoInfo={addVideoResult.video}
+              onVideoSelected={handleVideoSelected}
+            />
+          )}
+        </Box>
+      </Stack>
+      <HistoryRightSideBar
+        open={historyBarOpen}
+        handleDrawerClose={handleHistoryBarClose}
+        list={vidHist}
+      />
+      <YouTubeDialog
+        videoId={chosenVideoId}
+        open={openYTDialog}
+        onClose={() => setOpenYTDialog(false)}
+      />
+    </>
   );
 };
 

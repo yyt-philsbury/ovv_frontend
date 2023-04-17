@@ -5,7 +5,7 @@ import { VideoInfoType } from 'types/VideoInfoType';
 
 function VideoList(props: {
   videos: VideoInfoType[];
-  onVideoSelected: (id: string) => void;
+  onVideoSelected: (vid: VideoInfoType) => void;
 }) {
   const { videos, onVideoSelected } = props;
   return (

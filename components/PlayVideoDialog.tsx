@@ -6,6 +6,19 @@ import React from 'react';
 import YouTube from 'react-youtube';
 
 function YouTubeDialog({ videoId, open, onClose }) {
+  const [width, setWidth] = React.useState(0);
+  const [height, setHeight] = React.useState(0);
+
+  const handleWindowResize = () => {
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
+  };
+
+  React.useEffect(() => {
+    // component is mounted and window is available
+    handleWindowResize();
+  }, []);
+
   return (
     <Dialog
       open={open}
@@ -13,8 +26,8 @@ function YouTubeDialog({ videoId, open, onClose }) {
       maxWidth="md"
       PaperProps={{
         style: {
-          width: window.innerWidth,
-          height: window.innerHeight,
+          width,
+          height,
           maxWidth: 'unset',
           display: 'flex',
           justifyContent: 'center',
@@ -26,8 +39,8 @@ function YouTubeDialog({ videoId, open, onClose }) {
         <YouTube
           videoId={videoId}
           opts={{
-            width: window.innerWidth * 0.85,
-            height: window.innerHeight * 0.83,
+            width: width * 0.85,
+            height: height * 0.8,
             playerVars: { autoplay: 1 },
           }}
         />
