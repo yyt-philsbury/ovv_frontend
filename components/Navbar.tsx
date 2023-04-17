@@ -1,14 +1,12 @@
-import AddIcon from '@mui/icons-material/Add';
-import HomeIcon from '@mui/icons-material/Home';
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { alpha, styled } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import InputBase from '@mui/material/InputBase';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import Link from 'next/link';
 import React from 'react';
 
 const Search = styled('div')(({ theme }) => ({
@@ -42,19 +40,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     [theme.breakpoints.up('xs')]: {
-      width: '20ch',
-    },
-    [theme.breakpoints.up('sm')]: {
-      width: '25ch',
-    },
-    [theme.breakpoints.up('md')]: {
       width: '30ch',
     },
+    [theme.breakpoints.up('sm')]: {
+      width: '35ch',
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '40ch',
+    },
     [theme.breakpoints.up('lg')]: {
-      width: '45ch',
+      width: '55ch',
     },
     [theme.breakpoints.up('xl')]: {
-      width: '60ch',
+      width: '70ch',
     },
   },
 }));
@@ -70,27 +68,12 @@ function Navbar() {
           }}
         >
           <Stack direction="row" alignItems="center" spacing={1}>
-            <MenuIcon />
-            <HomeIcon
-              sx={{
-                display: {
-                  sm: 'block',
-                  md: 'none',
-                },
-              }}
-            />
-            <Typography
-              variant="h5"
-              sx={{
-                display: {
-                  xs: 'none',
-                  sm: 'none',
-                  md: 'block',
-                },
-              }}
-            >
-              Old Viral Videos
-            </Typography>
+            <Link href="/" style={{ textDecoration: 'none' }}>
+              <Button sx={{ color: '#fff', fontSize: 20 }}>LATEST</Button>
+            </Link>
+            <Link href="/add" style={{ textDecoration: 'none' }}>
+              <Button sx={{ color: '#fff', fontSize: 20 }}>ADD</Button>
+            </Link>
           </Stack>
           <Search>
             <SearchIconWrapper>
@@ -101,21 +84,6 @@ function Navbar() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <AddIcon />
-            <Typography
-              variant="h6"
-              sx={{
-                display: {
-                  xs: 'none',
-                  sm: 'none',
-                  md: 'block',
-                },
-              }}
-            >
-              Add Old Viral Video
-            </Typography>
-          </Stack>
         </Toolbar>
       </AppBar>
       {/* Empty toolbar to move content down because we want fixed position */}
