@@ -96,7 +96,10 @@ const Home: NextPage = () => {
     setHistoryBarOpen(true);
   };
   const handleUpdateVidHistory = (vid: VideoInfoType) => {
-    const newHist = [vid, ...vidHist];
+    const newHist = [vid, ...vidHist.filter(e => e.id !== vid.id)].slice(
+      0,
+      100,
+    );
     setVidHist(newHist);
     localStorage.setItem('videoHistory', JSON.stringify(newHist));
   };
@@ -104,6 +107,10 @@ const Home: NextPage = () => {
     handleUpdateVidHistory(vid);
     setChosenVideoId(vid.id);
     setOpenYTDialog(true);
+  };
+  const handleClearHist = () => {
+    setVidHist([]);
+    localStorage.setItem('videoHistory', JSON.stringify([]));
   };
 
   return (
@@ -175,6 +182,7 @@ const Home: NextPage = () => {
         handleDrawerClose={handleHistoryBarClose}
         list={vidHist}
         onVideoSelected={handleVideoSelected}
+        handleClearHist={handleClearHist}
       />
       <YouTubeDialog
         videoId={chosenVideoId}

@@ -12,7 +12,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import React from 'react';
+import React, { useState } from 'react';
 import { VideoInfoType } from 'types/VideoInfoType';
 
 const drawerWidth = 360;
@@ -24,6 +24,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: 'flex-end',
+  '&:hover': {
+    backgroundColor: 'lightblue',
+  },
 }));
 
 function HistoryRightSideBar(props: {
@@ -31,12 +34,30 @@ function HistoryRightSideBar(props: {
   handleDrawerClose: () => void;
   list: VideoInfoType[];
   onVideoSelected: (vid: VideoInfoType) => void;
+  handleClearHist: () => void;
 }) {
-  const { open, handleDrawerClose, list, onVideoSelected } = props;
+  const { open, handleDrawerClose, list, onVideoSelected, handleClearHist } =
+    props;
   const theme = useTheme();
 
   const handleVideoSelected = (vid: VideoInfoType) => {
     onVideoSelected(vid);
+  };
+
+  const [clearHistConfirmed, setClearHistConfirmed] = useState(false);
+
+  const handleClearClick = () => {
+    if (clearHistConfirmed) {
+      handleClearHist();
+      setClearHistConfirmed(false);
+    } else {
+      setClearHistConfirmed(true);
+    }
+  };
+
+  const handleCloseDrawer = () => {
+    setClearHistConfirmed(false);
+    handleDrawerClose();
   };
 
   return (
@@ -53,8 +74,8 @@ function HistoryRightSideBar(props: {
       anchor="right"
       open={open}
     >
-      <DrawerHeader>
-        <IconButton onClick={handleDrawerClose}>
+      <DrawerHeader onClick={handleCloseDrawer}>
+        <IconButton onClick={handleCloseDrawer}>
           {theme.direction === 'ltr' ? (
             <ChevronRightIcon />
           ) : (
@@ -65,11 +86,13 @@ function HistoryRightSideBar(props: {
       <Divider />
       <List>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={handleClearClick}>
             <ListItemIcon>
               <DeleteIcon />
             </ListItemIcon>
-            <ListItemText primary="Clear History" />
+            <ListItemText
+              primary={clearHistConfirmed ? 'Are you sure?' : 'Clear History'}
+            />
           </ListItemButton>
         </ListItem>
       </List>
@@ -79,6 +102,7 @@ function HistoryRightSideBar(props: {
           <ListItem key={index} disablePadding>
             <ListItemButton
               onClick={() => {
+                setClearHistConfirmed(false);
                 handleVideoSelected(vidInfo);
               }}
             >
