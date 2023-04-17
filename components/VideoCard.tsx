@@ -4,6 +4,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import Link from 'next/link';
 import React from 'react';
 import { VideoInfoType } from 'types/VideoInfoType';
 
@@ -22,7 +23,16 @@ function VideoCard(props: {
         image={`https://img.youtube.com/vi/${id}/hqdefault.jpg`}
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography
+          gutterBottom
+          variant="h5"
+          component="div"
+          sx={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            height: '5em', // adjust this number to limit the height of the title container
+          }}
+        >
           {`${title}`}
         </Typography>
         <Typography variant="body1" color="text.secondary">
@@ -33,7 +43,14 @@ function VideoCard(props: {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Go to Youtube</Button>
+        <Link
+          style={{ textDecoration: 'none' }}
+          href={`https://www.youtube.com/watch?v=${videoInfo.id}`}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <Button size="small">Go to Youtube</Button>
+        </Link>
         <Button
           size="small"
           onClick={() => {

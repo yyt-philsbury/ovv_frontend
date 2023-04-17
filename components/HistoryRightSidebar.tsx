@@ -92,6 +92,14 @@ function HistoryRightSideBar(props: {
               <ListItemText
                 primary={vidInfo.title}
                 secondary={`${vidInfo.original_upload_date} ${vidInfo.author}`}
+                primaryTypographyProps={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  maxHeight: '5em',
+                }}
+                sx={{
+                  marginLeft: '3px',
+                }}
               />
             </ListItemButton>
           </ListItem>

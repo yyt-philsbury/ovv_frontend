@@ -174,6 +174,7 @@ const Home: NextPage = () => {
         open={historyBarOpen}
         handleDrawerClose={handleHistoryBarClose}
         list={vidHist}
+        onVideoSelected={handleVideoSelected}
       />
       <YouTubeDialog
         videoId={chosenVideoId}

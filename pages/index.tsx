@@ -26,18 +26,18 @@ const Home: NextPage = () => {
       },
       {
         author: 'bob',
-        id: 'mFCC8PGCZC4',
+        id: 'yLupcG_eFag',
         original_upload_date: '2020-01-01',
         title:
-          '[4K] 230408 MusicBank in Paris "Kitsch" IVE REI 아이브 레이 focus cam',
+          "입덕직캠] 르세라핌 김채원 직캠 4K 'ANTIFRAGILE' (LE SSERAFIM KIM CHAEWON FanCam) | LE SSERAFIM COMEBACK SHOW",
         views: 1000,
       },
       {
-        author: 'bob',
-        id: 'mFCC8PGCZC4',
+        author: 'bob asf afasf afa sfaf asfasf',
+        id: 'NjKKaVhCLaI',
         original_upload_date: '2020-01-01',
         title:
-          '[4K] 230408 MusicBank in Paris "Kitsch" IVE REI 아이브 레이 focus cam',
+          '[Fancam] Cho A of AOA(에이오에이 초아) Heart Attack(심쿵해) @M COUNTDOWN_150625',
         views: 1000,
       },
       {
@@ -142,6 +142,7 @@ const Home: NextPage = () => {
         open={historyBarOpen}
         handleDrawerClose={handleHistoryBarClose}
         list={vidHist}
+        onVideoSelected={handleVideoSelected}
       />
       <YouTubeDialog
         videoId={chosenVideoId}
