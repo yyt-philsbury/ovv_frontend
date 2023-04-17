@@ -20,6 +20,8 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    'no-console': 'off',
+
     // NO FORMATTING RELATED ERRORS, we use prettier for formatting
     'no-relative-import-paths/no-relative-import-paths': [
       'error',
@@ -45,7 +47,6 @@ module.exports = {
       },
     ],
 
-    'no-console': 'error',
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
     'unused-imports/no-unused-imports': 'error',
@@ -66,4 +67,3 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
   },
 };
-

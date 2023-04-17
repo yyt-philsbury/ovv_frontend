@@ -7,3 +7,4 @@
 .env.development
 .env.production
 next.config.js
+/public/*.pdf
