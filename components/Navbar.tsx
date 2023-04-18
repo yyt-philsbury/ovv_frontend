@@ -1,8 +1,10 @@
+import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { alpha, styled } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
@@ -57,8 +59,30 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function Navbar(props: { handleHistoryBarOpen: () => void }) {
-  const { handleHistoryBarOpen } = props;
+function Navbar(props: {
+  handleMenuBarToggle: () => void;
+  handleHistoryBarOpen: () => void;
+  handleSearch: (arg: string) => void;
+}) {
+  const { handleHistoryBarOpen, handleSearch, handleMenuBarToggle } = props;
+  const [isInputFocused, setIsInputFocused] = React.useState(false);
+
+  const handleInputFocus = () => {
+    setIsInputFocused(true);
+  };
+
+  const handleInputBlur = () => {
+    setIsInputFocused(false);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && isInputFocused) {
+      const searchValue = event.currentTarget.value.trim();
+      if (searchValue !== '') {
+        handleSearch(searchValue);
+      }
+    }
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -69,6 +93,22 @@ function Navbar(props: { handleHistoryBarOpen: () => void }) {
             justifyContent: 'space-between',
           }}
         >
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{
+              mr: 2,
+              display: {
+                xs: 'block',
+                sm: 'block',
+                md: 'none',
+              },
+            }}
+          >
+            <MenuIcon onClick={handleMenuBarToggle} />
+          </IconButton>
           <Stack
             direction="row"
             alignItems="center"
@@ -82,10 +122,10 @@ function Navbar(props: { handleHistoryBarOpen: () => void }) {
             }}
           >
             <Link href="/" style={{ textDecoration: 'none' }}>
-              <Button sx={{ color: '#fff', fontSize: 20 }}>LATEST</Button>
+              <Button sx={{ color: '#fff', fontSize: 18 }}>HOME</Button>
             </Link>
             <Link href="/add" style={{ textDecoration: 'none' }}>
-              <Button sx={{ color: '#fff', fontSize: 20 }}>ADD</Button>
+              <Button sx={{ color: '#fff', fontSize: 18 }}>ADD</Button>
             </Link>
           </Stack>
           <Search>
@@ -95,12 +135,15 @@ function Navbar(props: { handleHistoryBarOpen: () => void }) {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
+              onKeyDown={handleKeyDown}
+              onFocus={handleInputFocus}
+              onBlur={handleInputBlur}
             />
           </Search>
           <Button
             sx={{
               color: '#fff',
-              fontSize: 20,
+              fontSize: 18,
               display: {
                 xs: 'none',
                 sm: 'none',
@@ -109,7 +152,7 @@ function Navbar(props: { handleHistoryBarOpen: () => void }) {
             }}
             onClick={handleHistoryBarOpen}
           >
-            HISTORY
+            WATCH HISTORY
           </Button>
         </Toolbar>
       </AppBar>

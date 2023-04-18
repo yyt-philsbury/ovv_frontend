@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import axios, { AxiosError } from 'axios';
 import HistoryRightSideBar from 'components/HistoryRightSidebar';
+import LeftSidebar from 'components/LeftSidebar';
 import Navbar from 'components/Navbar';
 import YouTubeDialog from 'components/PlayVideoDialog';
 import VideoCard from 'components/VideoCard';
@@ -49,6 +50,7 @@ const Home: NextPage = () => {
   const [vidHist, setVidHist] = React.useState<VideoInfoType[]>([]);
   const [chosenVideoId, setChosenVideoId] = React.useState<string>('');
   const [openYTDialog, setOpenYTDialog] = React.useState(false);
+  const [menuBarOpen, setMenuBarOpen] = React.useState(false);
 
   React.useEffect(() => {
     const hist = localStorage.getItem('videoHistory');
@@ -112,11 +114,35 @@ const Home: NextPage = () => {
     setVidHist([]);
     localStorage.setItem('videoHistory', JSON.stringify([]));
   };
+  const handleSearch = (searchTerm: string) => {
+    console.log(searchTerm);
+  };
+  const handleMenuBarToggle = () => {
+    setMenuBarOpen(!menuBarOpen);
+  };
+  const handleOpenRightHistBar = () => {
+    setMenuBarOpen(false);
+    setHistoryBarOpen(true);
+  };
 
   return (
     <>
       <Stack spacing={1}>
-        <Navbar handleHistoryBarOpen={handleHistoryBarOpen} />
+        <Navbar
+          handleHistoryBarOpen={handleHistoryBarOpen}
+          handleSearch={handleSearch}
+          handleMenuBarToggle={handleMenuBarToggle}
+        />
+        <LeftSidebar
+          open={menuBarOpen}
+          handleOpenRightHistBar={handleOpenRightHistBar}
+          onMenuBarOpen={() => {
+            setMenuBarOpen(true);
+          }}
+          onMenuBarClose={() => {
+            setMenuBarOpen(false);
+          }}
+        />
         <Box
           sx={{
             display: 'flex',

@@ -1,5 +1,6 @@
 import Stack from '@mui/material/Stack';
 import HistoryRightSideBar from 'components/HistoryRightSidebar';
+import LeftSidebar from 'components/LeftSidebar';
 import Navbar from 'components/Navbar';
 import YouTubeDialog from 'components/PlayVideoDialog';
 import VideoList from 'components/VideoList';
@@ -13,6 +14,7 @@ const Home: NextPage = () => {
   const [openYTDialog, setOpenYTDialog] = React.useState(false);
   const [historyBarOpen, setHistoryBarOpen] = React.useState(false);
   const [vidHist, setVidHist] = React.useState<VideoInfoType[]>([]);
+  const [menuBarOpen, setMenuBarOpen] = React.useState(false);
 
   React.useEffect(() => {
     setVideos([
@@ -135,13 +137,37 @@ const Home: NextPage = () => {
     setVidHist([]);
     localStorage.setItem('videoHistory', JSON.stringify([]));
   };
+  const handleSearch = (searchTerm: string) => {
+    console.log(searchTerm);
+  };
+  const handleMenuBarToggle = () => {
+    setMenuBarOpen(!menuBarOpen);
+  };
+  const handleOpenRightHistBar = () => {
+    setMenuBarOpen(false);
+    setHistoryBarOpen(true);
+  };
 
   return (
     <>
       <Stack spacing={1}>
-        <Navbar handleHistoryBarOpen={handleHistoryBarOpen} />
+        <Navbar
+          handleHistoryBarOpen={handleHistoryBarOpen}
+          handleSearch={handleSearch}
+          handleMenuBarToggle={handleMenuBarToggle}
+        />
         <VideoList videos={videos} onVideoSelected={handleVideoSelected} />
       </Stack>
+      <LeftSidebar
+        open={menuBarOpen}
+        handleOpenRightHistBar={handleOpenRightHistBar}
+        onMenuBarOpen={() => {
+          setMenuBarOpen(true);
+        }}
+        onMenuBarClose={() => {
+          setMenuBarOpen(false);
+        }}
+      />
       <HistoryRightSideBar
         open={historyBarOpen}
         handleDrawerClose={handleHistoryBarClose}
