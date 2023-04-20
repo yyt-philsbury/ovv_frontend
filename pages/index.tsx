@@ -1,4 +1,8 @@
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import axios, { AxiosError } from 'axios';
 import HistoryRightSideBar from 'components/HistoryRightSidebar';
 import LeftSidebar from 'components/LeftSidebar';
 import Navbar from 'components/Navbar';
@@ -7,6 +11,7 @@ import VideoList from 'components/VideoList';
 import type { NextPage } from 'next';
 import React from 'react';
 import { VideoInfoType } from 'types/VideoInfoType';
+import timeoutSignalController from 'utils/abort_timeout';
 
 const Home: NextPage = () => {
   const [videos, setVideos] = React.useState<VideoInfoType[]>([]);
@@ -15,98 +20,11 @@ const Home: NextPage = () => {
   const [historyBarOpen, setHistoryBarOpen] = React.useState(false);
   const [vidHist, setVidHist] = React.useState<VideoInfoType[]>([]);
   const [menuBarOpen, setMenuBarOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [errTxt, setErrTxt] = React.useState('');
 
   React.useEffect(() => {
-    setVideos([
-      {
-        author: 'bob',
-        id: 'mFCC8PGCZC4',
-        original_upload_date: '2020-01-01',
-        title:
-          '[4K] 230408 MusicBank in Paris "Kitsch" IVE REI 아이브 레이 focus cam',
-        views: 1000,
-      },
-      {
-        author: 'bob',
-        id: 'yLupcG_eFag',
-        original_upload_date: '2020-01-01',
-        title:
-          "입덕직캠] 르세라핌 김채원 직캠 4K 'ANTIFRAGILE' (LE SSERAFIM KIM CHAEWON FanCam) | LE SSERAFIM COMEBACK SHOW",
-        views: 1000,
-      },
-      {
-        author: 'bob asf afasf afa sfaf asfasf',
-        id: 'NjKKaVhCLaI',
-        original_upload_date: '2020-01-01',
-        title:
-          '[Fancam] Cho A of AOA(에이오에이 초아) Heart Attack(심쿵해) @M COUNTDOWN_150625',
-        views: 1000,
-      },
-      {
-        author: 'bob',
-        id: 'mFCC8PGCZC4',
-        original_upload_date: '2020-01-01',
-        title:
-          '[4K] 230408 MusicBank in Paris "Kitsch" IVE REI 아이브 레이 focus cam',
-        views: 1000,
-      },
-      {
-        author: 'bob',
-        id: 'mFCC8PGCZC4',
-        original_upload_date: '2020-01-01',
-        title:
-          '[4K] 230408 MusicBank in Paris "Kitsch" IVE REI 아이브 레이 focus cam',
-        views: 1000,
-      },
-      {
-        author: 'bob',
-        id: 'mFCC8PGCZC4',
-        original_upload_date: '2020-01-01',
-        title:
-          '[4K] 230408 MusicBank in Paris "Kitsch" IVE REI 아이브 레이 focus cam',
-        views: 1000,
-      },
-      {
-        author: 'bob',
-        id: 'mFCC8PGCZC4',
-        original_upload_date: '2020-01-01',
-        title:
-          '[4K] 230408 MusicBank in Paris "Kitsch" IVE REI 아이브 레이 focus cam',
-        views: 1000,
-      },
-      {
-        author: 'bob',
-        id: 'mFCC8PGCZC4',
-        original_upload_date: '2020-01-01',
-        title:
-          '[4K] 230408 MusicBank in Paris "Kitsch" IVE REI 아이브 레이 focus cam',
-        views: 1000,
-      },
-      {
-        author: 'bob',
-        id: 'mFCC8PGCZC4',
-        original_upload_date: '2020-01-01',
-        title:
-          '[4K] 230408 MusicBank in Paris "Kitsch" IVE REI 아이브 레이 focus cam',
-        views: 1000,
-      },
-      {
-        author: 'bob',
-        id: 'mFCC8PGCZC4',
-        original_upload_date: '2020-01-01',
-        title:
-          '[4K] 230408 MusicBank in Paris "Kitsch" IVE REI 아이브 레이 focus cam',
-        views: 1000,
-      },
-      {
-        author: 'bob',
-        id: 'mFCC8PGCZC4',
-        original_upload_date: '2020-01-01',
-        title:
-          '[4K] 230408 MusicBank in Paris "Kitsch" IVE REI 아이브 레이 focus cam',
-        views: 1000,
-      },
-    ]);
+    handleSearch('');
   }, []);
 
   React.useEffect(() => {
@@ -138,7 +56,41 @@ const Home: NextPage = () => {
     localStorage.setItem('videoHistory', JSON.stringify([]));
   };
   const handleSearch = (searchTerm: string) => {
-    console.log(searchTerm);
+    setIsLoading(true);
+    setErrTxt('');
+    const abortSignalController = timeoutSignalController(5000);
+
+    axios
+      .get(`/v1/core/videos`, {
+        signal: abortSignalController.signal,
+        timeout: 5000,
+        timeoutErrorMessage: 'Timed out trying to fetch results',
+        params: {
+          search: searchTerm,
+          years: [],
+        },
+      })
+      .then(rsp => {
+        const videoResults: VideoInfoType[] = rsp.data;
+        setVideos(videoResults);
+      })
+      .catch(err => {
+        setVideos([]);
+        if (abortSignalController.signal.aborted) {
+          setErrTxt(`Timed out trying to reach server`);
+        } else if (err instanceof AxiosError) {
+          if (err.response)
+            setErrTxt(
+              `${err.response.data.error} ${err.response.data.message}`,
+            );
+          else setErrTxt(`${err.code} ${err.message}`);
+        } else if (err instanceof Error) {
+          setErrTxt(err.message);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
   const handleMenuBarToggle = () => {
     setMenuBarOpen(!menuBarOpen);
@@ -156,7 +108,31 @@ const Home: NextPage = () => {
           handleSearch={handleSearch}
           handleMenuBarToggle={handleMenuBarToggle}
         />
-        <VideoList videos={videos} onVideoSelected={handleVideoSelected} />
+        {isLoading && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
+        {!isLoading && (
+          <VideoList videos={videos} onVideoSelected={handleVideoSelected} />
+        )}
+        {errTxt && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Typography variant="h3">{errTxt}</Typography>
+          </Box>
+        )}
       </Stack>
       <LeftSidebar
         open={menuBarOpen}

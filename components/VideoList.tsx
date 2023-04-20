@@ -9,7 +9,13 @@ function VideoList(props: {
 }) {
   const { videos, onVideoSelected } = props;
   return (
-    <Grid container spacing={2}>
+    <Grid
+      container
+      spacing={2}
+      sx={{
+        paddingRight: '1vw',
+      }}
+    >
       {videos.map((e, idx) => {
         return (
           <Grid key={idx.toString()} item xs={6} sm={4} md={3} lg={2}>

@@ -4,5 +4,6 @@ export type VideoInfoType = {
   title: string;
   original_upload_date: string;
   views: number;
+  added_on: string;
 };
 

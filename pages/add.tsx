@@ -131,6 +131,7 @@ const Home: NextPage = () => {
         <Navbar
           handleHistoryBarOpen={handleHistoryBarOpen}
           handleSearch={handleSearch}
+          disableSearch
           handleMenuBarToggle={handleMenuBarToggle}
         />
         <LeftSidebar

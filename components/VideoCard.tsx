@@ -4,6 +4,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import moment from 'moment';
 import Link from 'next/link';
 import React from 'react';
 import { VideoInfoType } from 'types/VideoInfoType';
@@ -13,14 +14,14 @@ function VideoCard(props: {
   onVideoSelected?: (vidSelected: VideoInfoType) => void;
 }) {
   const { videoInfo, onVideoSelected } = props;
-  const { author, id, original_upload_date, title } = videoInfo;
+  const { author, id, original_upload_date, title, added_on } = videoInfo;
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
         alt="green iguana"
         height="140"
-        image={`https://img.youtube.com/vi/${id}/hqdefault.jpg`}
+        image={`https://img.youtube.com/vi/${id}/mqdefault.jpg`}
       />
       <CardContent>
         <Typography
@@ -39,7 +40,12 @@ function VideoCard(props: {
           {`${author}`}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {`${original_upload_date}`}
+          {`Original upload date: ${original_upload_date}`}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {`Added to OVV on: ${moment(new Date(added_on)).format(
+            'YYYY-MM-DD',
+          )}`}
         </Typography>
       </CardContent>
       <CardActions>

@@ -60,11 +60,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function Navbar(props: {
+  disableSearch?: boolean;
   handleMenuBarToggle: () => void;
   handleHistoryBarOpen: () => void;
   handleSearch: (arg: string) => void;
 }) {
-  const { handleHistoryBarOpen, handleSearch, handleMenuBarToggle } = props;
+  const {
+    handleHistoryBarOpen,
+    handleSearch,
+    handleMenuBarToggle,
+    disableSearch = false,
+  } = props;
   const [isInputFocused, setIsInputFocused] = React.useState(false);
 
   const handleInputFocus = () => {
@@ -78,9 +84,7 @@ function Navbar(props: {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && isInputFocused) {
       const searchValue = event.currentTarget.value.trim();
-      if (searchValue !== '') {
-        handleSearch(searchValue);
-      }
+      handleSearch(searchValue || '');
     }
   };
 
@@ -106,8 +110,9 @@ function Navbar(props: {
                 md: 'none',
               },
             }}
+            onClick={handleMenuBarToggle}
           >
-            <MenuIcon onClick={handleMenuBarToggle} />
+            <MenuIcon />
           </IconButton>
           <Stack
             direction="row"
@@ -128,18 +133,20 @@ function Navbar(props: {
               <Button sx={{ color: '#fff', fontSize: 18 }}>ADD</Button>
             </Link>
           </Stack>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-              onKeyDown={handleKeyDown}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-            />
-          </Search>
+          {!disableSearch && (
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+                onKeyDown={handleKeyDown}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+              />
+            </Search>
+          )}
           <Button
             sx={{
               color: '#fff',
