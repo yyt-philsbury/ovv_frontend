@@ -8,3 +8,4 @@
 .env.production
 next.config.js
 /public/*.pdf
+ecosystem.config.js
