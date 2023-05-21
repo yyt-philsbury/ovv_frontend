@@ -23,8 +23,12 @@ const Home: NextPage = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [errTxt, setErrTxt] = React.useState('');
 
+  const [currSearchTerm, setCurrSearchTerm] = React.useState('');
+  const [currSkip, setCurrSkip] = React.useState(0);
+  const [currTake] = React.useState(250);
+
   React.useEffect(() => {
-    handleSearch('');
+    handleSearch('', 0, 250);
   }, []);
 
   React.useEffect(() => {
@@ -55,7 +59,7 @@ const Home: NextPage = () => {
     setVidHist([]);
     localStorage.setItem('videoHistory', JSON.stringify([]));
   };
-  const handleSearch = (searchTerm: string) => {
+  const handleSearch = (searchTerm: string, skip: number, take: number) => {
     setIsLoading(true);
     setErrTxt('');
     const abortSignalController = timeoutSignalController(5000);
@@ -67,6 +71,8 @@ const Home: NextPage = () => {
         timeoutErrorMessage: 'Timed out trying to fetch results',
         params: {
           search: searchTerm,
+          skip,
+          take,
           years: [],
         },
       })
@@ -89,6 +95,8 @@ const Home: NextPage = () => {
         }
       })
       .finally(() => {
+        setCurrSearchTerm(searchTerm);
+        setCurrSkip(skip);
         setIsLoading(false);
       });
   };
@@ -105,7 +113,7 @@ const Home: NextPage = () => {
       <Stack spacing={1}>
         <Navbar
           handleHistoryBarOpen={handleHistoryBarOpen}
-          handleSearch={handleSearch}
+          handleSearch={arg => handleSearch(arg, 0, currTake)}
           handleMenuBarToggle={handleMenuBarToggle}
         />
         {isLoading && (
@@ -120,7 +128,18 @@ const Home: NextPage = () => {
           </Box>
         )}
         {!isLoading && (
-          <VideoList videos={videos} onVideoSelected={handleVideoSelected} />
+          <VideoList
+            videos={videos}
+            onVideoSelected={handleVideoSelected}
+            onNext={() => {
+              const nextSkip = currSkip + currTake;
+              handleSearch(currSearchTerm, nextSkip, currTake);
+            }}
+            onPrev={() => {
+              const nextSkip = Math.max(currSkip - currTake, 0);
+              handleSearch(currSearchTerm, nextSkip, currTake);
+            }}
+          />
         )}
         {errTxt && (
           <Box
